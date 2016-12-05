@@ -19,3 +19,5 @@ that takes time. So the idea was: Let them run in parallel. Doing so I only have
 to wait for one time out and not all the others.
 
 Since the fping tool is available I found no need to invent it by myself.
+
+Added flag retry to adjust fping with more retries if necessary
