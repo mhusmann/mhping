@@ -44,13 +44,12 @@ func fillChannel(c chan string, ip, retries string) {
 }
 
 func main() {
-	retries := flag.String("ret", "3", "Number of retries")
+	retries := flag.String("retry", "3", "Number of retries")
 	flag.Parse()
 	var channels [lim]chan string
 	var ip string
 	count := 0
 
-	fmt.Printf("Retries= %s\n", *retries)
 	checkExtern(extern)
 	fmt.Println("Now running fping as GO-Routines")
 	for i := range channels {
