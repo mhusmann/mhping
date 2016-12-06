@@ -46,26 +46,29 @@ func fillChannel(c chan string, ip string, retries *string) {
 
 func main() {
 	retries := flag.String("retry", "3", "Number of retries")
+	nHosts := flag.Int("num", lim, "Number of hosts to ping")
 	flag.Parse()
-	var channels [lim]chan string
-	var slice = &channels
+
+	var hosts = make([]chan string, *nHosts)
 	var ip string
 	count := 0
 
 	checkExtern(extern)
 	fmt.Println("Now running fping as GO-Routines")
-	for i := range slice {
-		slice[i] = make(chan string)
+	fmt.Printf("Pinging %s times, checking %d hosts\n", *retries,
+		*nHosts)
+	for i := range hosts {
+		hosts[i] = make(chan string)
 	}
-	for i := 0; i < lim; i++ {
+	for i := 0; i < *nHosts; i++ {
 		ip = ipStart + strconv.Itoa(i+1)
-		go fillChannel(slice[i], ip, retries)
+		go fillChannel(hosts[i], ip, retries)
 	}
-	for _, c := range slice {
+	for _, c := range hosts {
 		if res := <-c; len(res) > 0 {
 			count++
 			fmt.Printf("%3d  %s", count, res)
 		}
 	}
-	fmt.Printf("Found %d hosts\a\n", count)
+	fmt.Printf("Found %d of %d hosts\a\n", count, *nHosts)
 }
