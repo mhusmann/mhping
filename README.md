@@ -21,3 +21,5 @@ to wait for one time out and not all the others.
 Since the fping tool is available I found no need to invent it by myself.
 
 Added flag retry to adjust fping with more retries if necessary
+
+Slice

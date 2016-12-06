@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"log"
 	"os/exec"
+	"strconv"
 	"strings"
 )
 
@@ -31,8 +32,8 @@ func checkExtern(adr string) {
 
 // fillChannel put fpings result in each channel
 // if the host is not alive, fill that channel with an empty string
-func fillChannel(c chan string, ip, retries string) {
-	out, _ := exec.Command("fping", "-r"+retries,
+func fillChannel(c chan string, ip string, retries *string) {
+	out, _ := exec.Command("fping", "-r"+*retries,
 		"-de", ip).CombinedOutput()
 	res := string(out)
 	if strings.Contains(res, "alive") {
@@ -47,19 +48,20 @@ func main() {
 	retries := flag.String("retry", "3", "Number of retries")
 	flag.Parse()
 	var channels [lim]chan string
+	var slice = &channels
 	var ip string
 	count := 0
 
 	checkExtern(extern)
 	fmt.Println("Now running fping as GO-Routines")
-	for i := range channels {
-		channels[i] = make(chan string)
+	for i := range slice {
+		slice[i] = make(chan string)
 	}
 	for i := 0; i < lim; i++ {
-		ip = ipStart + fmt.Sprintf("%d", i+1)
-		go fillChannel(channels[i], ip, *retries)
+		ip = ipStart + strconv.Itoa(i+1)
+		go fillChannel(slice[i], ip, retries)
 	}
-	for _, c := range channels {
+	for _, c := range slice {
 		if res := <-c; len(res) > 0 {
 			count++
 			fmt.Printf("%3d  %s", count, res)
