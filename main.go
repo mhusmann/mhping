@@ -13,6 +13,7 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
+	"time"
 )
 
 const lim = 100 // number of hosts to check
@@ -53,6 +54,7 @@ func main() {
 	var ip string
 	count := 0
 
+	startTime := time.Now()
 	checkExtern(extern)
 	fmt.Println("Now running fping as GO-Routines")
 	fmt.Printf("Pinging %s times, checking %d hosts\n", *retries,
@@ -70,5 +72,6 @@ func main() {
 			fmt.Printf("%3d  %s", count, res)
 		}
 	}
-	fmt.Printf("Found %d of %d hosts\a\n", count, *nHosts)
+	fmt.Printf("Found %d of %d hosts, in: %v\a\n", count, *nHosts,
+		time.Since(startTime))
 }
