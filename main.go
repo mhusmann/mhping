@@ -56,8 +56,8 @@ func main() {
 
 	startTime := time.Now()
 	checkExtern(extern)
-	fmt.Println("Now running fping as GO-Routines")
-	fmt.Printf("Pinging %s times, checking %d hosts\n", *retries,
+	fmt.Print("Now running fping as GO-Routines, ")
+	fmt.Printf("pinging %s times, checking %d hosts\n", *retries,
 		*nHosts)
 	for i := range hosts {
 		hosts[i] = make(chan string)
