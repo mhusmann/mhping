@@ -1,9 +1,10 @@
 // mhping my last attempt to check which hosts are alive in my network
-// Solution now:
+// Solution:
 // create an array of channels
 // fill the channels by a go routine
-// then i check whether a channel is != ""
+// then I check whether a channel is != ""
 // mhusmann 2016-12-05
+
 package main
 
 import (
@@ -20,7 +21,7 @@ const lim = 100 // number of hosts to check
 const ipStart = "192.168.178."
 const extern = "www.google.com"
 
-// test whether the internet works
+// test the internal network
 func checkExtern(adr string) {
 	fmt.Printf("First pinging %s\n", adr)
 	out0, err := exec.Command("ping", "-c1", adr).Output()
@@ -72,6 +73,7 @@ func main() {
 			fmt.Printf("%3d  %s", count, res)
 		}
 	}
-	fmt.Printf("Found %d of %d hosts, in: %v\a\n", count, *nHosts,
+
+	fmt.Printf("Found %d of %d hosts, in: %s\a\n", count, *nHosts,
 		time.Since(startTime))
 }
